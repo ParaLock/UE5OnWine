@@ -8,10 +8,11 @@ This repo contains a collection of scripts and instructions for compiling and ru
 ## Instructions
 
 1. Setup Lutris
-   1. Clone ```wine-tkg``` repo and compile with latest wine staging
-   2. Create new application entry in Lutris
-   3. Set runner to ```wine-tkg```
-   4. Disable Esync but keep Fsync enabled (if supported by kernel)
+   1. Clone ```wine-tkg``` repo and compile with latest wine staging as wine branch
+   2. Copy built ```wine-tkg``` package to lutris runners directory
+   3. Create new application entry in Lutris
+   4. Set runner to ```wine-tkg```
+   5. Disable Esync but keep Fsync enabled (if supported by kernel)
 2. Setup Wine Prefix
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
    2. Use winetricks to install ```corefonts``` in prefix
