@@ -27,7 +27,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
     2. Apply ```wine_fixes.patch``` to UE5 source code
 4. Compile UnrealBuildTool
     1. In wine console: 
-       1. Change directory to engine source
+       1. Change to engine source root directory
        2. Run ```dotnet msbuild /target:build /property:Configuration=Development /nologo Engine\Source\Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:normal```
 5. Compile Engine
    1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
