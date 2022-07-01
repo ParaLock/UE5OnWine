@@ -37,6 +37,6 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. ```Engine\Build\BatchFiles\Build.bat <Project Name> Win64 Development -waitmutex```
 
 ## Notes
-1. ```dotnet48``` is required by the mstools installed
+1. ```dotnet48``` is required by the mstools installer
 
 
