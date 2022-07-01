@@ -14,10 +14,11 @@ This repo contains a collection of scripts and instructions for compiling and ru
    4. Disable Esync but keep Fsync enabled (if supported by kernel)
 2. Setup Wine Prefix
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
-   2. Use winetricks to install ```dotnet48``` in prefix
-   3. Use winecfg to set prefix windows version to windows 10
-   4. Download ```buildtools``` for vs 2019
-   5. Run buildtools installer in prefix using wine console
+   2. Use winetricks to install corefonts in prefix
+   3. Use winetricks to install ```dotnet48``` in prefix
+   4. Use winecfg to set prefix windows version to windows 10
+   5. Download ```buildtools``` for vs 2019
+   6. Run buildtools installer in prefix using wine console
        1. Launch with following arguments
            1. ``/norestart``
        2. Install requirements listed here (https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
