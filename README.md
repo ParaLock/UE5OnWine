@@ -20,7 +20,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
    5. Run buildtools installer in prefix using wine console
        1. Launch with following arguments
            1. ``/norestart``
-       2. Install required listed on the unreal engine release notes webpage here (https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
+       2. Install requirements listed here (https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
        3. After install, type wineboot in console to emulate system restart
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
