@@ -18,11 +18,19 @@ This repo contains a collection of scripts and instructions for compiling and ru
    3. Use winetricks to install ```dotnet48``` in prefix
    4. Use winecfg to set prefix windows version to windows 10
    5. Download ```buildtools``` for vs 2019
-   6. Run buildtools installer in prefix using wine console
+   6. Download ```.NET Core Runtime``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
+   7. Download ```Microsoft .NET Framework``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
+   6. Run build tools installer in prefix using wine console
        1. Launch with following arguments
            1. ``/norestart``
-       2. Install requirements listed here (https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
-       3. After install, type wineboot in console to emulate system restart
+       2. Install windows sdk requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
+       3. Run ```wineboot``` in console to emulate system restart
+   7. Run .NET core 3.1 runtime installer in wine console
+       1. Launch with ```/norestart```
+       2. Run ```wineboot``` in console to emulate system restart
+   8. Run ```Microsoft .NET Framework 4.6.2``` installer in wine console
+       1. Launch with ```/norestart```
+       2. Run ```wineboot``` in console to emulate system restart
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     2. Apply ```wine_fixes.patch``` to UE5 source code
