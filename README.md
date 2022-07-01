@@ -1,5 +1,5 @@
 # Overview
-This repo contains a collection of scripts and instructions for compiling and running Unreal Engine 5 from scratch under Wine.
+This repo contains a collection of scripts and instructions for compiling and running Unreal Engine 5 from source under Wine.
 
 ## Prerequisites
 
