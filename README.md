@@ -22,10 +22,12 @@ This repo contains a collection of scripts and instructions for compiling and ru
    6. Download ```.NET Core Runtime``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
    7. Download ```Microsoft .NET Framework``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
    6. Run build tools installer in prefix using wine console
-       1. Launch with following arguments
+       1. Switch prefix to windows 7 mode
+       2. Launch with following arguments
            1. ``/norestart``
-       2. Install windows sdk requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
-       3. Run ```wineboot``` in console to emulate system restart
+       3. Install windows sdk requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
+       4. Run ```wineboot``` in console to emulate system restart
+       5. Switch prefix back to windows 10 mode
    7. Run ```.NET core runtime``` installer in wine console
        1. Launch with ```/norestart```
        2. Run ```wineboot``` in console to emulate system restart
