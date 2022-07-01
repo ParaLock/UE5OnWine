@@ -25,10 +25,10 @@ This repo contains a collection of scripts and instructions for compiling and ru
            1. ``/norestart``
        2. Install windows sdk requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
        3. Run ```wineboot``` in console to emulate system restart
-   7. Run .NET core 3.1 runtime installer in wine console
+   7. Run ```.NET core runtime``` installer in wine console
        1. Launch with ```/norestart```
        2. Run ```wineboot``` in console to emulate system restart
-   8. Run ```Microsoft .NET Framework 4.6.2``` installer in wine console
+   8. Run ```Microsoft .NET Framework``` installer in wine console
        1. Launch with ```/norestart```
        2. Run ```wineboot``` in console to emulate system restart
 3. Setup UE5 source code
