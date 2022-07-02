@@ -1,8 +1,8 @@
 diff --git a/Engine/Build/BatchFiles/GenerateProjectFiles.bat b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
-index fbc9bc218175..e5b511ecc6e1 100755
+index fbc9bc218175..0efb89672681 100755
 --- a/Engine/Build/BatchFiles/GenerateProjectFiles.bat
 +++ b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
-@@ -48,13 +48,13 @@ fc /b ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\Unrea
+@@ -48,13 +48,16 @@ fc /b ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\Unrea
  if not errorlevel 1 goto SkipClean
  copy /y ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\UnrealBuildToolPrevFiles.txt >nul
  
@@ -12,13 +12,45 @@ index fbc9bc218175..e5b511ecc6e1 100755
  :SkipClean
  echo Building UnrealBuildTool...
 -dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet
-+dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
++dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
  
 -if errorlevel 1 goto Error_UBTCompileFailed
++dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
++
++
 +rem if errorlevel 1 goto Error_UBTCompileFailed
  
  rem ## Run UnrealBuildTool to generate Visual Studio solution and project files
  rem ## NOTE: We also pass along any arguments to the GenerateProjectFiles.bat here
+diff --git a/Engine/Build/LowLevelTests_GenProps.xml b/Engine/Build/LowLevelTests_GenProps.xml
+index ba032b6f3de3..8a9ea89a495d 100644
+--- a/Engine/Build/LowLevelTests_GenProps.xml
++++ b/Engine/Build/LowLevelTests_GenProps.xml
+@@ -1,12 +1,12 @@
+-﻿<?xml version="1.0" encoding="utf-8"?>
+-<BuildGraph xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.epicgames.com/BuildGraph ../../Build/Graph/Schema.xsd" xmlns="http://www.epicgames.com/BuildGraph">
+-  <Property Name="TestNames" Value="HeadlessChaos" />
+-  <Property Name="HeadlessChaosDisabled" Value="False" />
+-  <Property Name="HeadlessChaosShort" Value="Headless Chaos" />
+-  <Property Name="HeadlessChaosTarget" Value="HeadlessChaos" />
+-  <Property Name="HeadlessChaosBinariesRelative" Value="Engine\Binaries" />
+-  <Property Name="HeadlessChaosResources" Value="" />
+-  <Property Name="HeadlessChaosResourcesDest" Value="" />
+-  <Option Name="RunHeadlessChaosTests" DefaultValue="False" Description="Run Headless Chaos Tests" />
+-  <Property Name="HeadlessChaosSupportedPlatforms" Value="Win64" />
++﻿<?xml version="1.0" encoding="utf-8"?>
++<BuildGraph xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.epicgames.com/BuildGraph ../../Build/Graph/Schema.xsd" xmlns="http://www.epicgames.com/BuildGraph">
++  <Property Name="TestNames" Value="HeadlessChaos" />
++  <Property Name="HeadlessChaosDisabled" Value="False" />
++  <Property Name="HeadlessChaosShort" Value="Headless Chaos" />
++  <Property Name="HeadlessChaosTarget" Value="HeadlessChaos" />
++  <Property Name="HeadlessChaosBinariesRelative" Value="Engine\Binaries" />
++  <Property Name="HeadlessChaosResources" Value="" />
++  <Property Name="HeadlessChaosResourcesDest" Value="" />
++  <Option Name="RunHeadlessChaosTests" DefaultValue="False" Description="Run Headless Chaos Tests" />
++  <Property Name="HeadlessChaosSupportedPlatforms" Value="Win64" />
+ </BuildGraph>
+\ No newline at end of file
 diff --git a/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs b/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs
 index 9fae2b4e9ac0..d2eecf07f2a5 100644
 --- a/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs
@@ -46,6 +78,19 @@ index 8b36a970f5a1..d5aea1161412 100644
  			}
  			return bResult;
  		}
+diff --git a/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs b/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
+index 1af0ffcc372a..b108d842288a 100644
+--- a/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
++++ b/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
+@@ -446,7 +446,7 @@ namespace UnrealBuildTool
+ 			FileReference? RunFile = null;
+ 			SingleInstanceMutex? Mutex = null;
+ 			JsonTracer? Tracer = null;
+-			
++
+ 			try
+ 			{
+ 				// Start capturing performance info
 diff --git a/Engine/Source/UnrealEditor.Target.cs b/Engine/Source/UnrealEditor.Target.cs
 index c3ea69a5293b..55a792c98e83 100644
 --- a/Engine/Source/UnrealEditor.Target.cs
