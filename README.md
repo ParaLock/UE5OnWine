@@ -20,8 +20,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
    4. Download and run ```visual studio 2019``` installer in wineprefix
       1. Select ```C++ Desktop Development``` and ```.NET Desktop Development``` packages.  
       2. If installer freezes during install of .NET 5 SDK, open process manager on host (such as htop) and kill zombie dotnet process.  
-   5. Use winecfg to swithc prefix back to windows 10 mode
-       5. Switch prefix back to windows 10 mode
+   5. Use winecfg to switch prefix back to windows 10 mode
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     2. Apply ```wine_fixes.patch``` to UE5 source code
