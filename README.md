@@ -17,30 +17,18 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
    2. Use winetricks to install ```corefonts``` in prefix
    3. Use winetricks to install ```dotnet48``` in prefix
-   4. Use winecfg to set prefix windows version to windows 10
-   5. Download ```buildtools``` for vs 2019
-   6. Download ```.NET Core Runtime``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
-   7. Download ```Microsoft .NET Framework``` requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
-   6. Run build tools installer in prefix using wine console
-       1. Switch prefix to windows 7 mode
-       2. Launch with following arguments
-           1. ``/norestart``
-       3. Install windows sdk requirement listed here [UE5 Release Notes](https://docs.unrealengine.com/5.0/en-US/unreal-engine-5-0-release-notes/)
-       4. Run ```wineboot``` in console to emulate system restart
+   4. Download and run ```visual studio 2019``` installer in wineprefix
+      1. Select ```C++ Desktop Development``` and ```.NET Desktop Development``` packages.  
+      2. If installer freezes during install of .NET 5 SDK, open process manager on host (such as htop) and kill zombie dotnet process.  
+   5. Use winecfg to swithc prefix back to windows 10 mode
        5. Switch prefix back to windows 10 mode
-   7. Run ```.NET core runtime``` installer in wine console
-       1. Launch with ```/norestart```
-       2. Run ```wineboot``` in console to emulate system restart
-   8. Run ```Microsoft .NET Framework``` installer in wine console
-       1. Launch with ```/norestart```
-       2. Run ```wineboot``` in console to emulate system restart
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     2. Apply ```wine_fixes.patch``` to UE5 source code
 4. Compile UnrealBuildTool
     1. In wine console: 
        1. Change to engine source root directory
-       2. Run ```dotnet msbuild /target:build /property:Configuration=Development /nologo Engine\Source\Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:normal```
+       2. Run ```GenerateProjectFiles.bat```
 5. Compile Engine
    1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
