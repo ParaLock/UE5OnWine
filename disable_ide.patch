@@ -1,0 +1,81 @@
+diff --git a/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp b/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
+index 1ab3736702e4..e7e2948578d5 100644
+--- a/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
++++ b/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
+@@ -1729,31 +1729,33 @@ void SProjectDialog::CreateAndOpenProject()
+ 		return;
+ 	}
+ 
+-	if (bShouldGenerateCode)
+-	{
+-		// If the engine is installed it is already compiled, so we can try to build and open a new project immediately. Non-installed situations might require building
+-		// the engine (especially the case when binaries came from P4), so we only open the IDE for that.
+-		if (FApp::IsEngineInstalled())
+-		{
+-			if (GameProjectUtils::BuildCodeProject(ProjectFile))
+-			{
+-				OpenCodeIDE(ProjectFile);
+-				OpenProject(ProjectFile);
+-			}
+-			else
+-			{
+-				// User will have already been prompted to open the IDE
+-			}
+-		}
+-		else
+-		{
+-			OpenCodeIDE(ProjectFile);
+-		}
+-	}
+-	else
+-	{
+-		OpenProject(ProjectFile);
+-	}
++	FMessageDialog::Open(EAppMsgType::Ok, FText(FText::FromString("Project created. Please build manually before opening.")));
++	CloseWindowIfAppropriate(true);
++	// if (bShouldGenerateCode)
++	// {
++	// 	// If the engine is installed it is already compiled, so we can try to build and open a new project immediately. Non-installed situations might require building
++	// 	// the engine (especially the case when binaries came from P4), so we only open the IDE for that.
++	// 	if (FApp::IsEngineInstalled())
++	// 	{
++	// 		if (GameProjectUtils::BuildCodeProject(ProjectFile))
++	// 		{
++	// 			//OpenCodeIDE(ProjectFile);
++	// 			OpenProject(ProjectFile);
++	// 		}
++	// 		else
++	// 		{
++	// 			// User will have already been prompted to open the IDE
++	// 		}
++	// 	}
++	// 	else
++	// 	{
++	// 		OpenCodeIDE(ProjectFile);
++	// 	}
++	// }
++	// else
++	// {
++	// 	OpenProject(ProjectFile);
++	// }
+ }
+ 
+ bool SProjectDialog::OpenProject(const FString& ProjectFile)
+diff --git a/Engine/Source/Editor/UnrealEd/Private/SourceCodeNavigation.cpp b/Engine/Source/Editor/UnrealEd/Private/SourceCodeNavigation.cpp
+index 592f52ef6412..a8e2b8ae7009 100644
+--- a/Engine/Source/Editor/UnrealEd/Private/SourceCodeNavigation.cpp
++++ b/Engine/Source/Editor/UnrealEd/Private/SourceCodeNavigation.cpp
+@@ -1861,10 +1861,10 @@ void FSourceCodeNavigation::DownloadAndInstallSuggestedIDE(FOnIDEInstallerDownlo
+ 
+ void FSourceCodeNavigation::RefreshCompilerAvailability()
+ {
+-	ISourceCodeAccessModule& SourceCodeAccessModule = FModuleManager::LoadModuleChecked<ISourceCodeAccessModule>("SourceCodeAccess");
+-	SourceCodeAccessModule.GetAccessor().RefreshAvailability();
++	// ISourceCodeAccessModule& SourceCodeAccessModule = FModuleManager::LoadModuleChecked<ISourceCodeAccessModule>("SourceCodeAccess");
++	// SourceCodeAccessModule.GetAccessor().RefreshAvailability();
+ 
+-	bCachedIsCompilerAvailable = SourceCodeAccessModule.CanCompileSourceCode();
++	bCachedIsCompilerAvailable = true;//SourceCodeAccessModule.CanCompileSourceCode();
+ }
+ 
+ bool FSourceCodeNavigation::OpenSourceFile( const FString& AbsoluteSourcePath, int32 LineNumber, int32 ColumnNumber )
