@@ -33,8 +33,11 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
        2. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
    2. To compile existing project/game
-       1. ```Engine\Build\BatchFiles\Build.bat <Project Name> Win64 Development -waitmutex```
-
+       1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to <ProjectName>.Target.cs
+       2. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
+       3. Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex
+   3. To run compiled game in editor
+       1. Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
 
