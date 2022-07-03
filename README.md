@@ -35,9 +35,9 @@ This repo contains a collection of scripts and instructions for compiling and ru
    2. To compile existing project/game
        1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to <ProjectName>.Target.cs
        2. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
-       3. Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex
-   3. To run compiled game in editor
-       1. Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"
+       3. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
+   3. To run compiled project in editor
+       1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
 
