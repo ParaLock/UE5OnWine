@@ -1,0 +1,78 @@
+diff --git a/Engine/Config/Windows/DataDrivenPlatformInfo.ini b/Engine/Config/Windows/DataDrivenPlatformInfo.ini
+index f086f43dff23..ebb42447020f 100644
+--- a/Engine/Config/Windows/DataDrivenPlatformInfo.ini
++++ b/Engine/Config/Windows/DataDrivenPlatformInfo.ini
+@@ -119,7 +119,7 @@ bSupportsSSDIndirect=true
+ bSupportsWaveOperations=true
+ bSupportsDxc=true
+ bSupportsDiaphragmDOF=true
+-bRequiresVendorExtensionsForAtomics=true
++bRequiresVendorExtensionsForAtomics=false
+ bSupportsAnisotropicMaterials=true
+ bSupportsVariableRateShading=true
+ bSupportsGen5TemporalAA=true
+@@ -133,11 +133,15 @@ bSupportsCapsuleShadows=true
+ bSupportsPercentageCloserShadows=true
+ bSupportsVolumetricFog=true
+ bSupportsIndexBufferUAVs=true
++bSupportsUInt64ImageAtomics=true
++
+ ; TODO: SM6.6
+ 
+ [PreviewPlatform PCD3D_SM6]
+ PlatformName=PCD3D_SM6
+ ShaderFormat=PCD3D_SM6
++bSupportsUInt64ImageAtomics=true
++bRequiresVendorExtensionsForAtomics=false
+ MenuText=LOCTEXT("PreviewMenuText_PCD3D_SM6", "Shader Model 6")
+ MenuTooltip=LOCTEXT("PreviewMenuTooltip_PCD3D_SM6", "Preview using SM6 device profile.")
+ 
+diff --git a/Engine/Source/Developer/Windows/ShaderFormatD3D/Private/ShaderFormatD3D.h b/Engine/Source/Developer/Windows/ShaderFormatD3D/Private/ShaderFormatD3D.h
+index 5099e0c7fc3d..35aa18d79197 100644
+--- a/Engine/Source/Developer/Windows/ShaderFormatD3D/Private/ShaderFormatD3D.h
++++ b/Engine/Source/Developer/Windows/ShaderFormatD3D/Private/ShaderFormatD3D.h
+@@ -6,7 +6,7 @@
+ #include "ShaderCompilerCommon.h"
+ 
+ // TODO: Lock D3D12 to SM 6.6 min spec
+-#define USE_SHADER_MODEL_6_6 0
++#define USE_SHADER_MODEL_6_6 1
+ 
+ struct FShaderTarget;
+ 
+diff --git a/Engine/Source/Runtime/D3D12RHI/Private/Windows/WindowsD3D12PipelineState.cpp b/Engine/Source/Runtime/D3D12RHI/Private/Windows/WindowsD3D12PipelineState.cpp
+index bc82799f0257..bbc84be95b89 100644
+--- a/Engine/Source/Runtime/D3D12RHI/Private/Windows/WindowsD3D12PipelineState.cpp
++++ b/Engine/Source/Runtime/D3D12RHI/Private/Windows/WindowsD3D12PipelineState.cpp
+@@ -899,7 +899,7 @@ static void CreatePipelineStateWithExtensions(ID3D12PipelineState** PSO, FD3D12A
+ 					ShdExtensionDesc.uavSlot,
+ 					ShdExtensionDesc.registerSpace
+ 				);
+-				check(NvStatus == NVAPI_OK);
++				//check(NvStatus == NVAPI_OK);
+ 
+ 				CreatePipelineStateWrapper(PSO, Adapter, CreationArgs);
+ 
+@@ -909,7 +909,7 @@ static void CreatePipelineStateWithExtensions(ID3D12PipelineState** PSO, FD3D12A
+ 					0xFFFFFFFF,
+ 					0
+ 				);
+-				check(NvStatus == NVAPI_OK);
++				//check(NvStatus == NVAPI_OK);
+ 
+ 				return;
+ 			}
+diff --git a/Engine/Source/Runtime/RenderCore/Public/RenderUtils.h b/Engine/Source/Runtime/RenderCore/Public/RenderUtils.h
+index 236031e2ddfd..0f3a747e13cf 100644
+--- a/Engine/Source/Runtime/RenderCore/Public/RenderUtils.h
++++ b/Engine/Source/Runtime/RenderCore/Public/RenderUtils.h
+@@ -711,7 +711,8 @@ inline bool NaniteAtomicsSupported()
+ 	}
+ #endif
+ 
+-	return bAtomicsSupported;
++	//return bAtomicsSupported;
++	return true;
+ }
+ 
+ inline bool DoesRuntimeSupportNanite(EShaderPlatform ShaderPlatform, bool bCheckForAtomicSupport, bool bCheckForProjectSetting)
