@@ -39,8 +39,9 @@ This repo contains a collection of scripts and instructions for compiling and ru
    3. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 6. Packaging Project
-   1. Run ```Engine/Build/BatchFiles/BuildUAT.bat
-   1. Run ```""Z:/home/linuxdev/UnrealEngine/Engine/Build/BatchFiles/RunUAT.bat" -ScriptsForProject="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -EditorIO -EditorIOPort=33121  -project="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook  -project="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" -targ
+   1. Apply build_uat.patch
+   2. Run ```Engine/Build/BatchFiles/BuildUAT.bat```
+   3. Run ```""Z:/home/linuxdev/UnrealEngine/Engine/Build/BatchFiles/RunUAT.bat" -ScriptsForProject="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -EditorIO -EditorIOPort=33121  -project="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook  -project="C:/users/linuxdev/Documents/Unreal Projects/CitySample/CitySample2/CitySample2.uproject" -targ
 et=CitySample  -unrealexe="Z:\home\linuxdev\UnrealEngine\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" -platform=Win64 -ddc=DerivedDataBackendGraph -stage -archive -package -build -compressed -iostore -pak -prereqs -archivedirectory="C:/users/linuxdev/Documents/Unreal Projects" -CrashReporter -clientconfig=Development"```
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
