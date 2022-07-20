@@ -23,7 +23,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
    5. Use winecfg to switch prefix back to windows 10 mode
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
-    2. Apply ```wine_fixes.patch``` to UE5 source code
+    2. Apply ```fix_ubt_build.patch``` to UE5 source code
 4. Compile UnrealBuildTool
     1. In wine console: 
        1. Change to engine source root directory
