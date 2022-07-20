@@ -17,13 +17,14 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
    2. Use winetricks to install ```dotnet48``` in prefix
    3. Download ```msbuild tools 2022``` installer
-   4. Run ```vs_BuildTools.exe --add Microsoft.NetCore.Component.Runtime.3.1```
-   5. Run ```vs_BuildTools.exe --add Microsoft.NetCore.Component.SDK```
-   6. Run ```vs_BuildTools.exe --add Microsoft.Net.Component.4.6.2.TargetingPack```
-   7. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.Component.Windows10SDK.18362```
-   5. Run ```vs_BuildTools.exe --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools```
-   6. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.ComponentGroup.VC.Tools.142.x86.x64```
-   6. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64```
+   4. Run ```vs_BuildTools.exe 
+       --add Microsoft.NetCore.Component.Runtime.3.1```
+       --add Microsoft.NetCore.Component.SDK```
+       --add Microsoft.Net.Component.4.6.2.TargetingPack```
+       --add Microsoft.VisualStudio.Component.Windows10SDK.18362```
+   9. Run ```vs_BuildTools.exe --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools```
+   10. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.ComponentGroup.VC.Tools.142.x86.x64```
+   11. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64```
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
