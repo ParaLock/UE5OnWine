@@ -23,8 +23,6 @@ This repo contains a collection of scripts and instructions for compiling and ru
        --add Microsoft.Net.Component.4.6.2.TargetingPack
        --add Microsoft.VisualStudio.Component.Windows10SDK.18362```
    9. Run ```vs_BuildTools.exe --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools```
-   10. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.ComponentGroup.VC.Tools.142.x86.x64```
-   11. Run ```vs_BuildTools.exe --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64```
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
