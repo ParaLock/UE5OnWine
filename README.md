@@ -15,15 +15,13 @@ This repo contains a collection of scripts and instructions for compiling and ru
    5. Disable Esync but keep Fsync enabled (if supported by kernel)
 2. Setup Wine Prefix
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
-   2. Use winetricks to install ```corefonts``` in prefix
-   3. Use winetricks to install ```dotnet48``` in prefix
-   4. Download and run ```visual studio 2019``` installer in wineprefix
-      1. Select ```C++ Desktop Development``` and ```.NET Desktop Development``` packages.  
-      2. If installer freezes during install of .NET 5 SDK, open process manager on host (such as htop) and kill zombie dotnet process.  
-   5. Use winecfg to switch prefix back to windows 10 mode
+   2. Use winetricks to install ```dotnet472``` in prefix
+   3. Download ```vs_community 2019``` installer
+   4. Run ```vs_community_2019.exe --wait --quiet --lang en-us --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.NetCoreTools --add Microsoft.VisualStudio.Component.VC.14.29.16.10.x86.x64```
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     2. Apply ```fix_ubt_build.patch``` to UE5 source code
+      1. git apply --ignore-space-change --ignore-whitespace <patch name>
 4. Compile UnrealBuildTool
     1. In wine console: 
        1. Change to engine source root directory
