@@ -1,0 +1,77 @@
+diff --git a/Engine/Build/BatchFiles/GenerateProjectFiles.bat b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
+index fbc9bc218175..0efb89672681 100755
+--- a/Engine/Build/BatchFiles/GenerateProjectFiles.bat
++++ b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
+@@ -48,13 +48,16 @@ fc /b ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\Unrea
+ if not errorlevel 1 goto SkipClean
+ copy /y ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\UnrealBuildToolPrevFiles.txt >nul
+ 
+-dotnet msbuild /target:clean /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet
++dotnet msbuild /target:clean /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
+ 
+ :SkipClean
+ echo Building UnrealBuildTool...
+-dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet
++dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
+ 
+-if errorlevel 1 goto Error_UBTCompileFailed
++dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:detailed
++
++
++rem if errorlevel 1 goto Error_UBTCompileFailed
+ 
+ rem ## Run UnrealBuildTool to generate Visual Studio solution and project files
+ rem ## NOTE: We also pass along any arguments to the GenerateProjectFiles.bat here
+diff --git a/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs b/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs
+index 9fae2b4e9ac0..d2eecf07f2a5 100644
+--- a/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs
++++ b/Engine/Source/Programs/Shared/EpicGames.Core/CommandLineAttribute.cs
+@@ -50,7 +50,7 @@ namespace EpicGames.Core
+ 
+ 			if(Prefix != null)
+ 			{
+-				if(!Prefix.StartsWith("-"))
++				if(!Prefix.StartsWith('-'))
+ 				{
+ 					throw new Exception("Command-line arguments must begin with a '-' character");
+ 				}
+diff --git a/Engine/Source/Programs/Shared/EpicGames.Core/CsProjectInfo.cs b/Engine/Source/Programs/Shared/EpicGames.Core/CsProjectInfo.cs
+index 8b36a970f5a1..d5aea1161412 100644
+--- a/Engine/Source/Programs/Shared/EpicGames.Core/CsProjectInfo.cs
++++ b/Engine/Source/Programs/Shared/EpicGames.Core/CsProjectInfo.cs
+@@ -747,7 +747,8 @@ namespace EpicGames.Core
+ 			else
+ 			{
+ 				string Msg = string.Format("Couldn't parse condition {0} in project file {1}", Element.ToString(), ProjectInfo.ProjectPath);
+-				throw new Exception(Msg);
++				//throw new Exception(Msg);
++				return false;
+ 			}
+ 			return bResult;
+ 		}
+diff --git a/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs b/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
+index 1af0ffcc372a..b108d842288a 100644
+--- a/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
++++ b/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.cs
+@@ -446,7 +446,7 @@ namespace UnrealBuildTool
+ 			FileReference? RunFile = null;
+ 			SingleInstanceMutex? Mutex = null;
+ 			JsonTracer? Tracer = null;
+-			
++
+ 			try
+ 			{
+ 				// Start capturing performance info
+diff --git a/Engine/Source/UnrealEditor.Target.cs b/Engine/Source/UnrealEditor.Target.cs
+index c3ea69a5293b..55a792c98e83 100644
+--- a/Engine/Source/UnrealEditor.Target.cs
++++ b/Engine/Source/UnrealEditor.Target.cs
+@@ -10,6 +10,8 @@ public class UnrealEditorTarget : TargetRules
+ 		Type = TargetType.Editor;
+ 		BuildEnvironment = TargetBuildEnvironment.Shared;
+ 		bBuildAllModules = true;
++		DisablePlugins.Add("VisualStudioSourceCodeAccess");
++		DisablePlugins.Add("ADOSupport");
+ 		ExtraModuleNames.Add("UnrealGame");
+ 	}
+ }
