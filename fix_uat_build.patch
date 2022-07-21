@@ -1,0 +1,16 @@
+diff --git a/Engine/Build/BatchFiles/BuildUAT.bat b/Engine/Build/BatchFiles/BuildUAT.bat
+index 131c6c7481e8..8e915a205798 100755
+--- a/Engine/Build/BatchFiles/BuildUAT.bat
++++ b/Engine/Build/BatchFiles/BuildUAT.bat
+@@ -56,8 +56,9 @@ call "%~dp0GetDotnetPath.bat"
+ if errorlevel 1 goto Error_NoDotnetSDK
+ 
+ echo Building AutomationTool...
+-dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationTool.csproj /verbosity:%MSBUILD_LOGLEVEL%
+-if errorlevel 1 goto Error_UATCompileFailed
++dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationTool.csproj /verbosity:normal
++dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationTool.csproj /verbosity:normal
++rem if errorlevel 1 goto Error_UATCompileFailed
+ 
+ rem record input files - regardless of how we got here, these are now our point of reference
+ copy /y ..\Intermediate\Build\AutomationToolFiles.txt ..\Intermediate\Build\AutomationToolPrevFiles.txt >nul
