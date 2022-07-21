@@ -30,8 +30,9 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. ```git apply --ignore-space-change --ignore-whitespace <patch name>```
 4. Compile UnrealBuildTool
     1. In wine console: 
-       1. Change to engine source root directory
-       2. Run ```GenerateProjectFiles.bat```
+       1. Make sure prefix is set to windows 7 mode
+       2. Change to engine source root directory
+       3. Run ```GenerateProjectFiles.bat```
 5. Compile Engine
    1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
