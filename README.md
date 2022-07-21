@@ -44,6 +44,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 6. Packaging Project
    1. Apply build_uat.patch
+   2. Compile AutomationUtils
+       1. Run ```Engine\Build\BatchFiles\Build.bat AutomationUtils.Automation Win64 Debug Build -waitmutex```
    2. Compile UAT
        1. Run ```Engine/Build/BatchFiles/BuildUAT.bat```
    3. Execute packaging 
