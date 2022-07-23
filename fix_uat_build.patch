@@ -1,8 +1,31 @@
 diff --git a/Engine/Build/BatchFiles/BuildUAT.bat b/Engine/Build/BatchFiles/BuildUAT.bat
-index 131c6c7481e8..8e915a205798 100755
+index 131c6c7481e8..9dee1262b986 100755
 --- a/Engine/Build/BatchFiles/BuildUAT.bat
 +++ b/Engine/Build/BatchFiles/BuildUAT.bat
-@@ -56,8 +56,9 @@ call "%~dp0GetDotnetPath.bat"
+@@ -36,8 +36,10 @@ dir ^
+  Programs\AutomationTool\*.csproj^
+  | find ".cs" >>..\Intermediate\Build\AutomationToolFiles.txt
+ 
++
+ if not exist ..\Binaries\DotNET\AutomationTool\AutomationTool.dll goto Build_AutomationTool
+ 
++
+ set MSBUILD_LOGLEVEL=%1
+ if not defined %MSBUILD_LOGLEVEL set MSBUILD_LOGLEVEL=quiet
+ 
+@@ -46,9 +48,10 @@ if not defined %ARGUMENT goto Check_UpToDate
+ if /I "%ARGUMENT%" == "FORCE" goto Build_AutomationTool
+ 
+ :Check_UpToDate
++
+ set RUNUAT_EXITCODE=0
+ rem per https://ss64.com/nt/fc.html using redirection syntax rather than errorlevel, based on observed inconsistent results from this function
+-fc ..\Intermediate\Build\AutomationToolFiles.txt ..\Intermediate\Build\AutomationToolPrevFiles.txt >nul && goto Exit
++rem fc ..\Intermediate\Build\AutomationToolFiles.txt ..\Intermediate\Build\AutomationToolPrevFiles.txt >nul && goto Exit
+ 
+ :Build_AutomationTool
+ rem ## Verify that dotnet is present
+@@ -56,8 +59,13 @@ call "%~dp0GetDotnetPath.bat"
  if errorlevel 1 goto Error_NoDotnetSDK
  
  echo Building AutomationTool...
@@ -10,7 +33,64 @@ index 131c6c7481e8..8e915a205798 100755
 -if errorlevel 1 goto Error_UATCompileFailed
 +dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationTool.csproj /verbosity:normal
 +dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationTool.csproj /verbosity:normal
++
++dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationUtils\AutomationUtils.Automation.csproj /verbosity:normal
++dotnet msbuild /target:build /property:Configuration=Development /nologo Programs\AutomationTool\AutomationUtils\AutomationUtils.Automation.csproj /verbosity:normal
++
 +rem if errorlevel 1 goto Error_UATCompileFailed
  
  rem record input files - regardless of how we got here, these are now our point of reference
  copy /y ..\Intermediate\Build\AutomationToolFiles.txt ..\Intermediate\Build\AutomationToolPrevFiles.txt >nul
+diff --git a/Engine/Source/Programs/AutomationTool/AutomationUtils/CommandUtils.cs b/Engine/Source/Programs/AutomationTool/AutomationUtils/CommandUtils.cs
+index 25bff042532e..27d39a3230a4 100644
+--- a/Engine/Source/Programs/AutomationTool/AutomationUtils/CommandUtils.cs
++++ b/Engine/Source/Programs/AutomationTool/AutomationUtils/CommandUtils.cs
+@@ -1920,7 +1920,7 @@ namespace AutomationTool
+ 		/// <returns>Returns the value or Default if the parameter was not found.</returns>
+ 		public static string ParseParamValue(object[] ArgList, string Param, string Default = null)
+ 		{
+-			if (!Param.EndsWith("="))
++			if (!Param.EndsWith('='))
+ 			{
+ 				Param += "=";
+ 			}
+@@ -1945,7 +1945,7 @@ namespace AutomationTool
+ 		public static string[] ParseParamValues(object[] ArgList, string Param)
+ 		{
+ 			string ParamEquals = Param;
+-			if (!ParamEquals.EndsWith("="))
++			if (!ParamEquals.EndsWith('='))
+ 			{
+ 				ParamEquals += "=";
+ 			}
+diff --git a/Engine/Source/Programs/AutomationTool/Program.cs b/Engine/Source/Programs/AutomationTool/Program.cs
+index 970b3d422b06..009575137c58 100644
+--- a/Engine/Source/Programs/AutomationTool/Program.cs
++++ b/Engine/Source/Programs/AutomationTool/Program.cs
+@@ -75,7 +75,7 @@ namespace AutomationToolDriver
+ 				string TelemetryPath = CurrentParam.Substring(CurrentParam.IndexOf('=') + 1);
+ 				AutomationToolCommandLine.SetUnchecked(Option_Telemetry, TelemetryPath);
+             }
+-			else if (CurrentParam.StartsWith("-"))
++			else if (CurrentParam.StartsWith('-'))
+ 			{
+ 				if (CurrentCommand != null)
+ 				{
+@@ -86,7 +86,7 @@ namespace AutomationToolDriver
+ 					throw new Exception($"Unknown parameter {CurrentParam} in the command line that does not belong to any command.");
+ 				}
+ 			}
+-			else if (CurrentParam.Contains("="))
++			else if (CurrentParam.Contains('='))
+ 			{
+ 				// Environment variable
+ 				int ValueStartIndex = CurrentParam.IndexOf('=') + 1;
+@@ -272,7 +272,7 @@ namespace AutomationToolDriver
+ 				string Param = Arguments[Index];
+ 				if(Param.Length > 0) 
+ 				{
+-					if (Param.StartsWith("-") || Param.Contains("="))
++					if (Param.StartsWith('-') || Param.Contains('='))
+ 					{
+ 						ParseParam(Arguments[Index], CurrentCommand);
+ 					}
