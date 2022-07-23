@@ -44,11 +44,12 @@ This repo contains a collection of scripts and instructions for compiling and ru
    3. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 6. Packaging Project
-   1. Apply build_uat.patch
-   2. Compile UAT
+   1. Make sure wine prefix is in windows 7 mode
+   2. Apply build_uat.patch
+   3. Compile UAT
        1. Run ```Engine/Build/BatchFiles/BuildUAT.bat```
-   3. Execute packaging 
-       1. Run ```Engine/Build/BatchFiles/RunUAT.bat BuildCookRun -platform=Win64 -project="<project file dir>" -clientconfig=Shipping -build -cook -stage -archive -archivedirectory=<archive location>```
+   4. Execute packaging 
+       1. Run ```Engine/Build/BatchFiles/RunUAT.bat BuildCookRun -platform=Win64 -map=Small_City_LVL -FastCook -project="<project location>" -clientconfig=Shipping -cook -stage -package -verbose```
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
 
