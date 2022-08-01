@@ -17,19 +17,12 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Use winetricks uninstaller to uninstall wine mono if present in prefix
    2. Use winetricks to install ```dotnet48``` in prefix
    3. Download ```msbuild tools 2022``` installer
-   4. Build offline installer
-      1. Run ```<msbuild tools installer>.exe --layout c:\localVSlayout_Part1 --lang en-US
+   4. Run ```<msbuild tools installer>.exe 
        --add Microsoft.NetCore.Component.Runtime.3.1
        --add Microsoft.NetCore.Component.SDK
        --add Microsoft.Net.Component.4.6.2.TargetingPack
-       --add Microsoft.VisualStudio.Component.Windows10SDK.18362```
-      2. Run ```<msbuild tools installer>.exe --layout c:\localVSlayout_Part2 --lang en-US --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools```
-   5. Run ```<msbuild tools installer>.exe --noweb
-       --add Microsoft.NetCore.Component.Runtime.3.1
-       --add Microsoft.NetCore.Component.SDK
-       --add Microsoft.Net.Component.4.6.2.TargetingPack
-       --add Microsoft.VisualStudio.Component.Windows10SDK.18362```
-   6. Run ```<msbuild tools installer>.exe --noweb --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools```
+       --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --quiet --wait```
+   5. Run ```<msbuild tools installer>.exe --noweb --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools --quiet --wait```
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
