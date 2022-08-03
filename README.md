@@ -26,8 +26,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
-    2. Apply ```fix_ubt_build.patch``` to UE5 source code
-       1. ```git apply --ignore-space-change --ignore-whitespace <patch name>```
+    2. Apply patches to UE5 source code
+       1. ```git apply --ignore-space-change --ignore-whitespace fix_*```
 4. Compile UnrealBuildTool
     1. In wine console: 
        1. Make sure prefix is set to windows 7 mode
