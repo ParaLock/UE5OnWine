@@ -45,7 +45,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 6. Packaging Project
    1. Make sure wine prefix is in windows 7 mode
-   2. Apply build_uat.patch
+   2. Build Unreal Frontend
+      1. ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
    3. Compile UAT
        1. Run ```Engine/Build/BatchFiles/BuildUAT.bat```
    4. Execute packaging 
