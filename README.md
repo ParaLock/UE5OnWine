@@ -29,7 +29,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
     2. Apply patches to UE5 source code
        1. ```git apply --ignore-space-change --ignore-whitespace fix_*```
     3. Make sure wine prefix is in windows 10 mode
-    4. Run ```Engine\Binaries\DotNET\GitDependencies.exe```
+    4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
     5. Run ```Setup.bat```
 4. Compile UnrealBuildTool
     1. In wine console: 
