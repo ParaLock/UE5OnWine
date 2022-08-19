@@ -1,0 +1,18 @@
+diff --git a/Engine/Build/BatchFiles/GenerateProjectFiles.bat b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
+index fbc9bc218175..338cd0f4396f 100755
+--- a/Engine/Build/BatchFiles/GenerateProjectFiles.bat
++++ b/Engine/Build/BatchFiles/GenerateProjectFiles.bat
+@@ -48,11 +48,11 @@ fc /b ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\Unrea
+ if not errorlevel 1 goto SkipClean
+ copy /y ..\Intermediate\Build\UnrealBuildToolFiles.txt ..\Intermediate\Build\UnrealBuildToolPrevFiles.txt >nul
+ 
+-dotnet msbuild /target:clean /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet
++dotnet msbuild /target:clean /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet -maxCpuCount:1
+ 
+ :SkipClean
+ echo Building UnrealBuildTool...
+-dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet
++dotnet msbuild /restore /target:build /property:Configuration=Development /nologo Programs\UnrealBuildTool\UnrealBuildTool.csproj /verbosity:quiet -maxCpuCount:1
+ 
+ if errorlevel 1 goto Error_UBTCompileFailed
+ 
