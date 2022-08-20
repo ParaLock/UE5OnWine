@@ -36,6 +36,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. Change to engine source root directory
        2. Run ```GenerateProjectFiles.bat```
 5. Compile Engine
+   0. Set ```ncrypt``` dll override to ```native``` in winecfg
    1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
        2. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
