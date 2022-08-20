@@ -36,15 +36,15 @@ This repo contains a collection of scripts and instructions for compiling and ru
        1. Change to engine source root directory
        2. Run ```GenerateProjectFiles.bat```
 5. Compile Engine
-   0. Set ```ncrypt``` dll override to ```native``` in winecfg
-   1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
+   1. Set ```ncrypt``` dll override to ```native``` in winecfg
+   2. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
        2. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
-   2. To compile existing project/game
+   3. To compile existing project/game
        1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to <ProjectName>.Target.cs
        2. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
        3. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
-   3. To run compiled project in editor
+   4. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 6. Packaging Project
    1. Build Unreal Frontend
