@@ -42,6 +42,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
 5. Build Unreal Frontend
    1. Fixes
       1. (```UserInterfaceCommand.cpp```): Unreal frontend tries to load visual studio upon start (which currently does not run under wine). Simply comment out visual studio loading code in ```UserInterfaceCommand.cpp```to fix this issue.
+      2. (```ProcessSingleton.cs```): Before launching its internal tasks, the unreal automation tooling allocates a mutex to protect certain resources from being accessed by multiple automation tooling instances simultaneously. Unfortunately mutex creation seems to freeze under wine. To fix this issue simply remove the mutex allocation and be especially careful to ensure only one instance is running at a time. 
    3. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
    4. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
 7. Compile Engine
