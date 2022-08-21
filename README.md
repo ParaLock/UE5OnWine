@@ -32,24 +32,33 @@ This repo contains a collection of scripts and instructions for compiling and ru
     4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
     5. Run ```Setup.bat```
 4. Compile UnrealBuildTool
-    1. In wine console: 
+    1. Fixes
+       1. Set ```ncrypt``` dll override to ```native``` in winecfg.. ```nuget``` does not seem to like the wine ncrypt dll.
+       2. (```CommandLineAttribute.cs```, ```AutomationTool/Program.cs```): For some reason string methods such as ```StartsWith```, ```Contains```, ```EndsWith``` do not properly compare input characters wrapped in single quotes. To fix the issue simply convert single quotes to double quotes.
+       3. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
+    3. In wine console: 
        1. Change to engine source root directory
        2. Run ```GenerateProjectFiles.bat```
-5. Compile Engine
-   1. Set ```ncrypt``` dll override to ```native``` in winecfg
-   2. To compile core engine and editor run the following commands in the wine console (from source root folder): 
-       1. ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
+5. Build Unreal Frontend
+   1. Fixes
+      1. (```UserInterfaceCommand.cpp```): Unreal frontend tries to load visual studio upon start (which currently does not run under wine). Simply comment out visual studio loading code in ```UserInterfaceCommand.cpp```to fix this issue.
+   4. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
+   3. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
+7. Compile Engine
+   1. Fixes
+       1. (```SProjectDialog.cpp```, ```SourceCodeNavigation```): Since visual studio does not currently work in wine you will need to comment out IDE setup and loading code in order to properly open projects and work within the Unreal Editor.
+       2. (```WindowsPlatformFile.cpp```): The windows file IO code in  does not seem to handle writes to non-overlapped IO file handles correctly. ```fix_big_files.patch``` fixes this issue.
+       3. (```RenderUtils.h```, ```WindowsD3D12PipelineState.cpp```): GPU vendor extensions currently do not work properly with dxvk-nvapi/vkd3d-proton so we need to tell the engine not to use them. 
+   4. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        2. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
-   3. To compile existing project/game
+   5. To compile existing project/game
        1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to <ProjectName>.Target.cs
        2. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
        3. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
-   4. To run compiled project in editor
+   6. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
-6. Packaging Project
-   1. Build Unreal Frontend
-      1. ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
-   2. Compile UAT
+8. Packaging Project
+   1. Compile UAT
        1. Run ```Engine/Build/BatchFiles/BuildUAT.bat```
    3. Run Unreal Frontend and deselect "Build UAT" before cooking
 ## Notes
