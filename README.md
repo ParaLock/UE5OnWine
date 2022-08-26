@@ -64,7 +64,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
 UE5 may at times freeze up or crash while being run under wine. Below is a set of recommendations for debugging and fixing various issues.
 1. Freezes
    1. IF UE5 freezes up and you also notice your system becoming unresponsive for a few seconds, then check ```dmesg``` for GPU crash messages. NVIDIA drivers provide an XID which specifies the type of issue which occured.
-   2. In general, GPU crashes are usually caused by shader issues. We recommend that you leverage vkd3d-proton (when in dx12 mode) to debug and fix the issue. We recommend using the vkd3d-proton breadcrumbs mechanism as your primary debugging tool. Once you have narrowed down the faulty shader in the vkd3d-proton log by examining breadcrumbs, you can decompile the shader in question, then use vkd3d-proton to swap out the faulty shader for your new version.
+   2. In general, GPU crashes are usually caused by shader issues. We recommend that you leverage vkd3d-proton (when in dx12 mode) to debug and fix the issue. We recommend using the vkd3d-proton breadcrumbs mechanism as your primary debugging tool. Once you have narrowed down the faulty shader in the vkd3d-proton log by examining breadcrumbs, you can decompile the shader in question, modify the decompiled shader to get around a certain issue, recompile the shader, and finally instruct vkd3d-proton to swap out the faulty shader for your new version.
    
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
