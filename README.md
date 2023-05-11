@@ -3,7 +3,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
 
 ## Prerequisites
 
-1. Lutris
+1. Bottles
 
 ## Instructions
 
