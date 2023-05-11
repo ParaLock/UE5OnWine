@@ -20,6 +20,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
        --add Microsoft.Net.Component.4.6.2.TargetingPack
        --add Microsoft.VisualStudio.Component.Windows10SDK.18362 --quiet --wait```
    5. Run ```<msbuild tools installer>.exe --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools --quiet --wait```
+   6. Set wine window renderer to vulkan
+      1. Setting can be accessed in Advanced Display Settings
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
