@@ -63,5 +63,6 @@ UE5 may at times freeze up or crash while being run under wine. Below is a set o
    
 ## Notes
 1. ```dotnet48``` is required by the mstools installer
+2. Testing with wine-tkg version 8.7 and UE 5.2
 
 
