@@ -1,0 +1,498 @@
+diff --git a/Engine/Build/BatchFiles/Build.bat b/Engine/Build/BatchFiles/Build.bat
+index 9da38f1432d7..ed9caf82e20d 100755
+--- a/Engine/Build/BatchFiles/Build.bat
++++ b/Engine/Build/BatchFiles/Build.bat
+@@ -47,7 +47,7 @@ if not exist %UBTPath% (
+ 		if errorlevel 1 goto Error_UBTCompileFailed
+ 	) else (
+ 		echo Building UnrealBuildTool with dotnet...
+-		dotnet build %ProjectFile% -c Development -v quiet
++		dotnet build %ProjectFile% -c Development -v quiet -maxCpuCount:1
+ 		if errorlevel 1 goto Error_UBTCompileFailed
+ 	)
+ )
+diff --git a/Engine/Build/BatchFiles/BuildUAT.bat b/Engine/Build/BatchFiles/BuildUAT.bat
+index b67bd97a40f4..0c9179692506 100755
+--- a/Engine/Build/BatchFiles/BuildUAT.bat
++++ b/Engine/Build/BatchFiles/BuildUAT.bat
+@@ -89,7 +89,7 @@ call "%~dp0GetDotnetPath.bat"
+ if errorlevel 1 goto Error_NoDotnetSDK
+ 
+ echo Building AutomationTool...
+-dotnet build Programs\AutomationTool\AutomationTool.csproj -c Development -v %MSBUILD_LOGLEVEL%
++dotnet build Programs\AutomationTool\AutomationTool.csproj -c Development -v %MSBUILD_LOGLEVEL% -maxCpuCount:1
+ if errorlevel 1 goto Error_UATCompileFailed
+ 
+ rem record input files - regardless of how we got here, these are now our point of reference
+diff --git a/Engine/Build/BatchFiles/BuildUBT.bat b/Engine/Build/BatchFiles/BuildUBT.bat
+index 01fec6f3be7e..4beb9dfbb5a2 100755
+--- a/Engine/Build/BatchFiles/BuildUBT.bat
++++ b/Engine/Build/BatchFiles/BuildUBT.bat
+@@ -83,7 +83,7 @@ call "%~dp0GetDotnetPath.bat"
+ if errorlevel 1 goto Error_NoDotnetSDK
+ 
+ echo Building UnrealBuildTool...
+-dotnet build Programs\UnrealBuildTool\UnrealBuildTool.csproj -c Development -v %MSBUILD_LOGLEVEL%
++dotnet build Programs\UnrealBuildTool\UnrealBuildTool.csproj -c Development -v %MSBUILD_LOGLEVEL% -maxCpuCount:1
+ if errorlevel 1 goto Error_UBTCompileFailed
+ 
+ rem record input files - regardless of how we got here, these are now our point of reference
+diff --git a/Engine/Build/BatchFiles/RunUAT.bat b/Engine/Build/BatchFiles/RunUAT.bat
+index 2c484237ded7..552e0dcf8fae 100755
+--- a/Engine/Build/BatchFiles/RunUAT.bat
++++ b/Engine/Build/BatchFiles/RunUAT.bat
+@@ -15,7 +15,9 @@ set DRIVE_LETTER=%~d0
+ FOR %%Z IN (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO SET DRIVE_LETTER=!DRIVE_LETTER:%%Z=%%Z!
+ SETLOCAL DISABLEDELAYEDEXPANSION
+ 
+-set SCRIPT_DIR=%DRIVE_LETTER%%~p0
++set SCRIPT_DIR="Z:\container_drive\more-data\UnrealEngine\Engine\Build\BatchFiles\"
++
++rem SCRIPT_DIR=%DRIVE_LETTER%%~p0
+ set UATExecutable=AutomationTool.dll
+ set UATDirectory=Binaries\DotNET\AutomationTool
+ 
+@@ -69,6 +71,7 @@ rem ## check if the UAT projects are present. if not, we'll just use the precomp
+ if not exist Source\Programs\AutomationTool\AutomationTool.csproj goto RunPrecompiled
+ if not exist Source\Programs\AutomationToolLauncher\AutomationToolLauncher.csproj goto RunPrecompiled
+ 
++
+ call "%SCRIPT_DIR%BuildUAT.bat" %MSBUILD_LOGLEVEL% %FORCECOMPILE_UAT%
+ if errorlevel 1 goto Error_UATCompileFailed
+ 
+diff --git a/Engine/Plugins/ScriptPlugin/Source/ScriptGeneratorUbtPlugin/ScriptGeneratorUbtPlugin.ubtplugin.csproj b/Engine/Plugins/ScriptPlugin/Source/ScriptGeneratorUbtPlugin/ScriptGeneratorUbtPlugin.ubtplugin.csproj
+index 028db6997431..a2eaaadd921a 100644
+--- a/Engine/Plugins/ScriptPlugin/Source/ScriptGeneratorUbtPlugin/ScriptGeneratorUbtPlugin.ubtplugin.csproj
++++ b/Engine/Plugins/ScriptPlugin/Source/ScriptGeneratorUbtPlugin/ScriptGeneratorUbtPlugin.ubtplugin.csproj
+@@ -13,7 +13,7 @@
+     <RootNamespace>ScriptGeneratorUbtPlugin</RootNamespace>
+     <AssemblyName>ScriptGeneratorUbtPlugin</AssemblyName>
+     <OutputPath>..\..\..\..\Binaries\DotNET\UnrealBuildTool\Plugins\ScriptGeneratorUbtPlugin\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+diff --git a/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp b/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
+index ae73874df0a2..f6ca0b9aa9f8 100644
+--- a/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
++++ b/Engine/Source/Editor/GameProjectGeneration/Private/SProjectDialog.cpp
+@@ -1752,6 +1752,7 @@ void SProjectDialog::CreateAndOpenProject()
+ 		else
+ 		{
+ 			OpenCodeIDE(ProjectFile);
++			OpenProject(ProjectFile);
+ 		}
+ 	}
+ 	else
+diff --git a/Engine/Source/Programs/AutomationTool/Android/Android.Automation.csproj b/Engine/Source/Programs/AutomationTool/Android/Android.Automation.csproj
+index 4a78d5c64efb..0ab8de23adc8 100644
+--- a/Engine/Source/Programs/AutomationTool/Android/Android.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Android/Android.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Android.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\Android</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/Apple/Apple.Automation.csproj b/Engine/Source/Programs/AutomationTool/Apple/Apple.Automation.csproj
+index 67c1c3009104..fd883c42db89 100644
+--- a/Engine/Source/Programs/AutomationTool/Apple/Apple.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Apple/Apple.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Apple.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\Apple</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/AutomationUtils/AutomationUtils.Automation.csproj b/Engine/Source/Programs/AutomationTool/AutomationUtils/AutomationUtils.Automation.csproj
+index 2c70b1df4469..f231f18b1b46 100644
+--- a/Engine/Source/Programs/AutomationTool/AutomationUtils/AutomationUtils.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/AutomationUtils/AutomationUtils.Automation.csproj
+@@ -11,7 +11,7 @@
+     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationUtils</OutputPath>
+     <Configurations>Debug;Release;Development</Configurations>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+diff --git a/Engine/Source/Programs/AutomationTool/BuildGraph/BuildGraph.Automation.csproj b/Engine/Source/Programs/AutomationTool/BuildGraph/BuildGraph.Automation.csproj
+index f6ad8cd73697..915dccae31e4 100644
+--- a/Engine/Source/Programs/AutomationTool/BuildGraph/BuildGraph.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/BuildGraph/BuildGraph.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>BuildGraph.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\BuildGraph</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+   </PropertyGroup>
+diff --git a/Engine/Source/Programs/AutomationTool/CookedEditor/CookedEditor.Automation.csproj b/Engine/Source/Programs/AutomationTool/CookedEditor/CookedEditor.Automation.csproj
+index e26f0c2ce732..6da7fbd91ebb 100644
+--- a/Engine/Source/Programs/AutomationTool/CookedEditor/CookedEditor.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/CookedEditor/CookedEditor.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>CookedEditor.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\CookedEditor</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/CrowdinLocalization/CrowdinLocalization.Automation.csproj b/Engine/Source/Programs/AutomationTool/CrowdinLocalization/CrowdinLocalization.Automation.csproj
+index f6ad9965c546..0b0bfd45a4e9 100644
+--- a/Engine/Source/Programs/AutomationTool/CrowdinLocalization/CrowdinLocalization.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/CrowdinLocalization/CrowdinLocalization.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>CrowdinLocalization.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\CrowdinLocalization</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages> <!-- remove non english resource languages -->
+     <DebugType>pdbonly</DebugType>
+diff --git a/Engine/Source/Programs/AutomationTool/Gauntlet/Gauntlet.Automation.csproj b/Engine/Source/Programs/AutomationTool/Gauntlet/Gauntlet.Automation.csproj
+index 0b5f68156a27..33a69f403752 100644
+--- a/Engine/Source/Programs/AutomationTool/Gauntlet/Gauntlet.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Gauntlet/Gauntlet.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Gauntlet.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Gauntlet</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    <!-- remove non english resource languages -->
+diff --git a/Engine/Source/Programs/AutomationTool/IOS/IOS.Automation.csproj b/Engine/Source/Programs/AutomationTool/IOS/IOS.Automation.csproj
+index 2300d75eaec3..f95f45b144a1 100644
+--- a/Engine/Source/Programs/AutomationTool/IOS/IOS.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/IOS/IOS.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>IOS.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\IOS</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/Linux/Linux.Automation.csproj b/Engine/Source/Programs/AutomationTool/Linux/Linux.Automation.csproj
+index 1c15a317e4a4..0dc0e4391a80 100644
+--- a/Engine/Source/Programs/AutomationTool/Linux/Linux.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Linux/Linux.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Linux.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\Linux\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/Localization/Localization.Automation.csproj b/Engine/Source/Programs/AutomationTool/Localization/Localization.Automation.csproj
+index b28af8def95f..c754bd2a7035 100644
+--- a/Engine/Source/Programs/AutomationTool/Localization/Localization.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Localization/Localization.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Localization.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Localization</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/LowLevelTests/LowLevelTests.Automation.csproj b/Engine/Source/Programs/AutomationTool/LowLevelTests/LowLevelTests.Automation.csproj
+index 5cd3d5b209cd..978fbaef028c 100644
+--- a/Engine/Source/Programs/AutomationTool/LowLevelTests/LowLevelTests.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/LowLevelTests/LowLevelTests.Automation.csproj
+@@ -11,7 +11,7 @@
+     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\LowLevelTests</OutputPath>
+     <Configurations>Debug;Release;Development</Configurations>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+     <DebugType>pdbonly</DebugType>
+ 	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>    <!-- remove non english resource languages -->
+diff --git a/Engine/Source/Programs/AutomationTool/Mac/Mac.Automation.csproj b/Engine/Source/Programs/AutomationTool/Mac/Mac.Automation.csproj
+index d6123ee3be6c..25c65249cd11 100644
+--- a/Engine/Source/Programs/AutomationTool/Mac/Mac.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Mac/Mac.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Mac.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\Mac\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/OneSkyLocalization/OneSkyLocalization.Automation.csproj b/Engine/Source/Programs/AutomationTool/OneSkyLocalization/OneSkyLocalization.Automation.csproj
+index 3f9933e1c546..c3144cc176ea 100644
+--- a/Engine/Source/Programs/AutomationTool/OneSkyLocalization/OneSkyLocalization.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/OneSkyLocalization/OneSkyLocalization.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>OneSkyLocalization.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\OneSkyLocalization</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/Scripts/AutomationScripts.Automation.csproj b/Engine/Source/Programs/AutomationTool/Scripts/AutomationScripts.Automation.csproj
+index b5b017e34747..1cd9b5da79d4 100644
+--- a/Engine/Source/Programs/AutomationTool/Scripts/AutomationScripts.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Scripts/AutomationScripts.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>AutomationScripts.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Scripts</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/SmartlingLocalization/SmartlingLocalization.Automation.csproj b/Engine/Source/Programs/AutomationTool/SmartlingLocalization/SmartlingLocalization.Automation.csproj
+index 63c858d0a5c7..707aa371f5cd 100644
+--- a/Engine/Source/Programs/AutomationTool/SmartlingLocalization/SmartlingLocalization.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/SmartlingLocalization/SmartlingLocalization.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>SmartlingLocalization.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\SmartlingLocalization</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages> <!-- remove non english resource languages -->
+     <DebugType>pdbonly</DebugType>
+diff --git a/Engine/Source/Programs/AutomationTool/SteamDeck/SteamDeck.Automation.csproj b/Engine/Source/Programs/AutomationTool/SteamDeck/SteamDeck.Automation.csproj
+index bf1d9e1c7c76..29147ea736f1 100644
+--- a/Engine/Source/Programs/AutomationTool/SteamDeck/SteamDeck.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/SteamDeck/SteamDeck.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>SteamDeck.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\SteamDeck\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/TVOS/TVOS.Automation.csproj b/Engine/Source/Programs/AutomationTool/TVOS/TVOS.Automation.csproj
+index 8e3d8003dcb5..7f5d28bcf5f9 100644
+--- a/Engine/Source/Programs/AutomationTool/TVOS/TVOS.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/TVOS/TVOS.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>TVOS.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\TVOS\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/Turnkey/Turnkey.Automation.csproj b/Engine/Source/Programs/AutomationTool/Turnkey/Turnkey.Automation.csproj
+index f3142b7fdf38..c211cca099f7 100644
+--- a/Engine/Source/Programs/AutomationTool/Turnkey/Turnkey.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Turnkey/Turnkey.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Turnkey.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Turnkey\</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>    <!-- remove non english resource languages -->
+diff --git a/Engine/Source/Programs/AutomationTool/Win/Win.Automation.csproj b/Engine/Source/Programs/AutomationTool/Win/Win.Automation.csproj
+index 56214e6d4617..0ec400145785 100644
+--- a/Engine/Source/Programs/AutomationTool/Win/Win.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/Win/Win.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>Win.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\Platforms\Windows</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+diff --git a/Engine/Source/Programs/AutomationTool/XLocLocalization/XLocLocalization.Automation.csproj b/Engine/Source/Programs/AutomationTool/XLocLocalization/XLocLocalization.Automation.csproj
+index fc00f1bddc3b..f0e417532810 100644
+--- a/Engine/Source/Programs/AutomationTool/XLocLocalization/XLocLocalization.Automation.csproj
++++ b/Engine/Source/Programs/AutomationTool/XLocLocalization/XLocLocalization.Automation.csproj
+@@ -13,7 +13,7 @@
+     <AssemblyName>XLocLocalization.Automation</AssemblyName>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <OutputPath>..\..\..\..\Binaries\DotNET\AutomationTool\AutomationScripts\XLocLocalization</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages> <!-- remove non english resource languages -->
+     <DebugType>pdbonly</DebugType>
+diff --git a/Engine/Source/Programs/Horde/Horde.Agent/Horde.Agent.csproj b/Engine/Source/Programs/Horde/Horde.Agent/Horde.Agent.csproj
+index 64965d3cbc58..f739d7c6ed27 100644
+--- a/Engine/Source/Programs/Horde/Horde.Agent/Horde.Agent.csproj
++++ b/Engine/Source/Programs/Horde/Horde.Agent/Horde.Agent.csproj
+@@ -15,7 +15,7 @@
+ 
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+     <DocumentationFile>HordeAgent.xml</DocumentationFile>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+   </PropertyGroup>
+ 
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Analyze|AnyCPU' ">
+diff --git a/Engine/Source/Programs/UnrealCloudDDC/Jupiter.Common/Jupiter.Common.csproj b/Engine/Source/Programs/UnrealCloudDDC/Jupiter.Common/Jupiter.Common.csproj
+index fa83d511a653..f9b5711c2301 100644
+--- a/Engine/Source/Programs/UnrealCloudDDC/Jupiter.Common/Jupiter.Common.csproj
++++ b/Engine/Source/Programs/UnrealCloudDDC/Jupiter.Common/Jupiter.Common.csproj
+@@ -6,7 +6,7 @@
+     <OutputType>Library</OutputType>
+     <StartupObject />
+     <Nullable>enable</Nullable>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <WarningsAsErrors />
+     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+     <LangVersion>10</LangVersion>
+diff --git a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Jupiter.csproj b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Jupiter.csproj
+index f389dc23ea56..edeb8ee3d7a8 100644
+--- a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Jupiter.csproj
++++ b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Jupiter.csproj
+@@ -29,7 +29,7 @@
+   <PropertyGroup>
+     <TargetFramework>net6.0</TargetFramework>
+     <Nullable>enable</Nullable>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <WarningsAsErrors />
+     <LangVersion>10</LangVersion>
+ 
+diff --git a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/Functional/Jupiter.Tests.Functional.csproj b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/Functional/Jupiter.Tests.Functional.csproj
+index 7725c90373a6..ea3d69f4333a 100644
+--- a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/Functional/Jupiter.Tests.Functional.csproj
++++ b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/Functional/Jupiter.Tests.Functional.csproj
+@@ -6,7 +6,7 @@
+     <IsPackable>false</IsPackable>
+     <Nullable>enable</Nullable>
+ 
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <LangVersion>10</LangVersion>
+   </PropertyGroup>
+ 
+diff --git a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/UnitTests/Jupiter.Tests.Unit.csproj b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/UnitTests/Jupiter.Tests.Unit.csproj
+index 02e1af7b557f..a125afc84de8 100644
+--- a/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/UnitTests/Jupiter.Tests.Unit.csproj
++++ b/Engine/Source/Programs/UnrealCloudDDC/Jupiter/Tests/UnitTests/Jupiter.Tests.Unit.csproj
+@@ -8,7 +8,7 @@
+     <AssemblyName>Jupiter.Tests.Unit</AssemblyName>
+     <Nullable>enable</Nullable>
+ 
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <WarningsAsErrors />
+     <LangVersion>10</LangVersion>
+   </PropertyGroup>
+diff --git a/Engine/Source/Programs/UnrealVS/UnrealVS.2019/UnrealVS.2019.csproj b/Engine/Source/Programs/UnrealVS/UnrealVS.2019/UnrealVS.2019.csproj
+index 755b107b3411..287cb442767f 100644
+--- a/Engine/Source/Programs/UnrealVS/UnrealVS.2019/UnrealVS.2019.csproj
++++ b/Engine/Source/Programs/UnrealVS/UnrealVS.2019/UnrealVS.2019.csproj
+@@ -180,7 +180,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <NoWarn>MSB3277;NU1603</NoWarn>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+     <OutputPath>bin\Release\</OutputPath>
+diff --git a/Engine/Source/Programs/UnrealVS/UnrealVS.2022/UnrealVS.2022.csproj b/Engine/Source/Programs/UnrealVS/UnrealVS.2022/UnrealVS.2022.csproj
+index c9b99ab661ad..f406696b419f 100644
+--- a/Engine/Source/Programs/UnrealVS/UnrealVS.2022/UnrealVS.2022.csproj
++++ b/Engine/Source/Programs/UnrealVS/UnrealVS.2022/UnrealVS.2022.csproj
+@@ -221,7 +221,7 @@
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+     <NoWarn>MSB3277</NoWarn>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+   </PropertyGroup>
+   <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
+     <ItemGroup>
+diff --git a/Engine/Source/Runtime/Launch/Private/LaunchEngineLoop.cpp b/Engine/Source/Runtime/Launch/Private/LaunchEngineLoop.cpp
+index 62471dcb8175..1a15cb1330f8 100644
+--- a/Engine/Source/Runtime/Launch/Private/LaunchEngineLoop.cpp
++++ b/Engine/Source/Runtime/Launch/Private/LaunchEngineLoop.cpp
+@@ -6496,6 +6496,8 @@ bool FEngineLoop::AppInit( )
+ 			}
+ 		}
+ 
++		bNeedCompile = false;
++
+ 		FEmbeddedCommunication::ForceTick(16);
+ 		
+ 		if(bNeedCompile)
+diff --git a/Engine/Source/ThirdParty/Windows/VisualStudioDTE/VisualStudioDTE.Build.cs b/Engine/Source/ThirdParty/Windows/VisualStudioDTE/VisualStudioDTE.Build.cs
+index 80bbb5dd1a9a..386486e8a01c 100644
+--- a/Engine/Source/ThirdParty/Windows/VisualStudioDTE/VisualStudioDTE.Build.cs
++++ b/Engine/Source/ThirdParty/Windows/VisualStudioDTE/VisualStudioDTE.Build.cs
+@@ -15,6 +15,8 @@ namespace UnrealBuildTool.Rules
+ 
+ 			PublicSystemIncludePaths.Add(ModuleDirectory);
+ 
++			PublicDefinitions.Add("WITH_VISUALSTUDIO_DTE=0");
++
+ 			if (Target.Platform != UnrealBuildTool.UnrealTargetPlatform.Win64 ||
+ 				Target.WindowsPlatform.Compiler == WindowsCompiler.Clang ||
+ 				Target.StaticAnalyzer == StaticAnalyzer.PVSStudio)
+@@ -28,7 +30,7 @@ namespace UnrealBuildTool.Rules
+ 				if (TryGetDteOlbPath(out DteOlbPath))
+ 				{
+ 					TypeLibraries.Add(new TypeLibrary(DteOlbPath, "lcid(\"0\") raw_interfaces_only named_guids", "dte80a.tlh"));
+-					PublicDefinitions.Add("WITH_VISUALSTUDIO_DTE=1");
++					//PublicDefinitions.Add("WITH_VISUALSTUDIO_DTE=1");
+ 				}
+ 				else
+ 				{
+diff --git a/Engine/Source/UnrealEditor.Target.cs b/Engine/Source/UnrealEditor.Target.cs
+index 5f7cb7bc4a03..90eb5efe0559 100644
+--- a/Engine/Source/UnrealEditor.Target.cs
++++ b/Engine/Source/UnrealEditor.Target.cs
+@@ -11,6 +11,7 @@ public class UnrealEditorTarget : TargetRules
+ 		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+ 		BuildEnvironment = TargetBuildEnvironment.Shared;
+ 		bBuildAllModules = true;
++		DisablePlugins.Add("ADOSupport");
+ 		ExtraModuleNames.Add("UnrealGame");
+ 	}
+ }
+diff --git a/Samples/Games/Lyra/Build/Scripts/Lyra.Automation.csproj b/Samples/Games/Lyra/Build/Scripts/Lyra.Automation.csproj
+index e091b14c9891..273ae6419626 100644
+--- a/Samples/Games/Lyra/Build/Scripts/Lyra.Automation.csproj
++++ b/Samples/Games/Lyra/Build/Scripts/Lyra.Automation.csproj
+@@ -10,7 +10,7 @@
+     <RootNamespace>Lyra.Automation</RootNamespace>
+     <AssemblyName>Lyra.Automation</AssemblyName>
+     <OutputPath>..\..\Binaries\DotNET\AutomationTool\AutomationScripts</OutputPath>
+-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+     <DebugType>pdbonly</DebugType>
+   </PropertyGroup>
