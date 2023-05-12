@@ -41,17 +41,12 @@ This repo contains a collection of scripts and instructions for compiling and ru
    3. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
 7. Compile Engine
    1. Fixes
-       1. (```SProjectDialog.cpp```, ```SourceCodeNavigation```): Since visual studio does not currently work in wine you will need to comment out IDE setup and loading code in order to properly open projects and work within the Unreal Editor.
-       2. (```WindowsPlatformFile.cpp```): The windows file IO code in  does not seem to handle writes to non-overlapped IO file handles correctly. ```fix_big_files.patch``` fixes this issue.
-       3. (```RenderUtils.h```, ```WindowsD3D12PipelineState.cpp```): GPU vendor extensions currently do not work properly with dxvk-nvapi/vkd3d-proton so we need to tell the engine not to use them.
-       1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to UnrealEditor.Target.cs
-       2. Add ```DisablePlugins.Add("ADOSupport");``` to UnrealEditor.Target.cs
+       1. Add ```DisablePlugins.Add("ADOSupport");``` to UnrealEditor.Target.cs
    4. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
    5. To compile existing project/game
-       1. Add ```DisablePlugins.Add("VisualStudioSourceCodeAccess");``` to <ProjectName>.Target.cs
-       2. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
-       3. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
+       1. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
+       2. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
    6. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 8. Packaging Project
