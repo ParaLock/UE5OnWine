@@ -26,8 +26,9 @@ This repo contains a collection of scripts and instructions for compiling and ru
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     3. Make sure wine prefix is in windows 10 mode
-    4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
-    5. Run ```Setup.bat```
+    4. Apply `fix_big_files.patch`
+    5. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
+    6. Run ```Setup.bat```
 4. Compile UnrealBuildTool
     1. Fixes
        1. Set ```ncrypt``` dll override to ```native``` in winecfg.. ```nuget``` does not seem to like the wine ncrypt dll.
