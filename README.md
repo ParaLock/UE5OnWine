@@ -28,7 +28,6 @@ This repo contains a collection of scripts and instructions for compiling and ru
 3. Install VSCode in prefix
 4. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
-    2. Apply `fix_big_files.patch`
     3. Apply `patch.diff`
     4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
     5. Run ```Setup.bat```
