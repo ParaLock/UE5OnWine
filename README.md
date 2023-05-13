@@ -25,7 +25,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
    7. Make sure wine prefix is in windows 10 mode
    8. Set ```ncrypt``` dll override to ```native``` in winecfg.. ```nuget``` does not seem to like the wine ncrypt dll. (Note this change can break other applications so it is best to remove override when not compiling unreal)
 
-3. Setup UE5 source code
+3. Install VSCode in prefix
+4. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
     2. Apply `fix_big_files.patch`
     3. Apply `patch.diff`
