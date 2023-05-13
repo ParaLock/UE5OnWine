@@ -22,27 +22,29 @@ This repo contains a collection of scripts and instructions for compiling and ru
    5. Run ```<msbuild tools installer>.exe --includeRecommended --includeOptional --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools --quiet --wait```
    6. Set wine window renderer to vulkan
       1. Setting can be accessed in Advanced Display Settings
+   7. Make sure wine prefix is in windows 10 mode
+   8. Set ```ncrypt``` dll override to ```native``` in winecfg.. ```nuget``` does not seem to like the wine ncrypt dll. (Note this change can break other applications so it is best to remove override when not compiling unreal)
 
 3. Setup UE5 source code
     1. Clone unreal engine 5 repo on host system (not in wine prefix)
-    3. Make sure wine prefix is in windows 10 mode
-    4. Apply `fix_big_files.patch`
-    5. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
-    6. Run ```Setup.bat```
+    2. Apply `fix_big_files.patch`
+    3. Apply `patch.diff`
+    4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
+    5. Run ```Setup.bat```
+
+4. Fixes
+   1. 
+   2. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
+   3. (`UnrealEditor.Target.cs`) Add ```DisablePlugins.Add("ADOSupport");``` it seems unreal has a hard time compiling the required header under wine.
+   4. 
 4. Compile UnrealBuildTool
-    1. Fixes
-       1. Set ```ncrypt``` dll override to ```native``` in winecfg.. ```nuget``` does not seem to like the wine ncrypt dll.
-       2. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
-    2. In wine console: 
+    1. In wine console: 
        1. Change to engine source root directory
        2. Run ```GenerateProjectFiles.bat```
 5. Build Unreal Frontend
-   1. Fixes
-   2. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
-   3. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
+   1. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
+   2. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
 7. Compile Engine
-   1. Fixes
-       1. Add ```DisablePlugins.Add("ADOSupport");``` to UnrealEditor.Target.cs
    4. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
    5. To compile existing project/game
