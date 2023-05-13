@@ -32,11 +32,6 @@ This repo contains a collection of scripts and instructions for compiling and ru
     4. Run ```Engine\Binaries\DotNET\GitDependencies\win-x64\GitDependencies.exe```
     5. Run ```Setup.bat```
 
-4. Fixes
-   1. 
-   2. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
-   3. (`UnrealEditor.Target.cs`) Add ```DisablePlugins.Add("ADOSupport");``` it seems unreal has a hard time compiling the required header under wine.
-   4. 
 4. Compile UnrealBuildTool
     1. In wine console: 
        1. Change to engine source root directory
@@ -45,16 +40,21 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
    2. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
 7. Compile Engine
-   4. To compile core engine and editor run the following commands in the wine console (from source root folder): 
+   1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
-   5. To compile existing project/game
+   2. To compile existing project/game
        1. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
        2. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
-   6. To run compiled project in editor
+   3. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 8. Packaging Project
    1. Run Unreal Frontend and have fun :)
 
+## Fixes Explained
+ 
+1. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
+2. (`UnrealEditor.Target.cs`) Add ```DisablePlugins.Add("ADOSupport");``` it seems unreal has a hard time compiling the required header under wine.
+   
 ## Debugging
 UE5 may at times freeze up or crash while being run under wine. Below is a set of recommendations for debugging and fixing various issues.
 1. Freezes
