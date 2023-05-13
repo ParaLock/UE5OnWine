@@ -55,6 +55,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
 1. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
 2. (`UnrealEditor.Target.cs`) Add ```DisablePlugins.Add("ADOSupport");``` it seems unreal has a hard time compiling the required header under wine.
 3. (```WindowsPlatformFile.cpp```) It appears that Unreal does not correctly handle a specific failure mode with regards to overlapped and non overlapped file IO. The bug manifests when dealing with extremely large files (such as the cooked city sample bundle). I think the issue is that the engine is relying on a bug in the win32 API, a bug which is not present in the wine equivalent. The fix boils down to resolving an IO request using overlapped IO if the request fails under a normal IO code path. This fix is contained in ```fix_big_files.patch```.
+4. (```*.csproj```) Due to some non critical (I think?) warnings that occur during dotnet execution we need to disable treatment of warnings as errors.
+5. (```VisualStudioDTE.Build.cs```) For some reason wine has a hard time compiling the header associated with Visual Studio DTE functionality. To avoid including this header in the compilation process we need to set the ```WITH_VISUALSTUDIO_DTE``` preprocessor directive to 0.
    
 ## Debugging
 UE5 may at times freeze up or crash while being run under wine. Below is a set of recommendations for debugging and fixing various issues.
