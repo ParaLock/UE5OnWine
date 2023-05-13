@@ -9,7 +9,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
 
 1. Setup Bottles
    1. Clone ```wine-tkg``` repo and compile with latest wine staging as wine branch
-   2. Copy built ```wine-tkg``` package to bottles runners directory
+   2. Build non-proton version of wine (default tkg preset)
+   3. Copy built ```wine-tkg``` package to bottles runners directory
 2. Setup Wine Prefix
    1. Use uninstaller to uninstall wine mono if present in prefix
    2. Use bottles to install ```dotnet48``` in prefix
