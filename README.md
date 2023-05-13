@@ -48,7 +48,8 @@ This repo contains a collection of scripts and instructions for compiling and ru
    3. To run compiled project in editor
        1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
 8. Packaging Project
-   1. Run Unreal Frontend and have fun :)
+   1. Run Unreal Frontend
+   2. Disable compile UAT before running profile
 
 ## Fixes Explained
  
