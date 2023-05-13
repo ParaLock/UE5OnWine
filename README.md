@@ -57,6 +57,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
 3. (```WindowsPlatformFile.cpp```) It appears that Unreal does not correctly handle a specific failure mode with regards to overlapped and non overlapped file IO. The bug manifests when dealing with extremely large files (such as the cooked city sample bundle). I think the issue is that the engine is relying on a bug in the win32 API, a bug which is not present in the wine equivalent. The fix boils down to resolving an IO request using overlapped IO if the request fails under a normal IO code path. This fix is contained in ```fix_big_files.patch```.
 4. (```*.csproj```) Due to some non critical (I think?) warnings that occur during dotnet execution we need to disable treatment of warnings as errors.
 5. (```VisualStudioDTE.Build.cs```) For some reason wine has a hard time compiling the header associated with Visual Studio DTE functionality. To avoid including this header in the compilation process we need to set the ```WITH_VISUALSTUDIO_DTE``` preprocessor directive to 0.
+6. (```RunUAT.bat```) The RunUAT.bat script is unable to correctly resolve the path to the batch files directory unless said path is hardcoded. To fix the issue, hardcode the variable SCRIPT_DIR to the absolute path of your unreal engine BatchFiles directory.
    
 ## Debugging
 UE5 may at times freeze up or crash while being run under wine. Below is a set of recommendations for debugging and fixing various issues.
