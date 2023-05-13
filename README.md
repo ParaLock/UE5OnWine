@@ -51,7 +51,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Run Unreal Frontend
    2. Disable compile UAT before running profile
 
-## Fixes Explained
+## Fixes
  
 1. (```GenerateProjectFiles.bat```, ```BuildUAT.bat```, ```RunUBT.bat```): ```dotnet msbuild``` does not work properly if it is allowed to run across multiple cores. Add ```-maxCpuCount:1``` to all msbuild calls which appear in various bat files to restrict msbuild to one core and fix the issue.
 2. (`UnrealEditor.Target.cs`) Add ```DisablePlugins.Add("ADOSupport");``` it seems unreal has a hard time compiling the required header under wine.
