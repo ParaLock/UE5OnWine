@@ -41,16 +41,18 @@ This repo contains a collection of scripts and instructions for compiling and ru
    1. Run ```Engine\Build\BatchFiles\Build.bat ShaderCompileWorker Win64 Development -waitmutex```
    2. Run ```Engine\Build\BatchFiles\Build.bat UnrealFrontend Win64 Development -waitmutex```
 7. Compile Engine
-   1. To compile core engine and editor run the following commands in the wine console (from source root folder): 
+   1. Add ```DisablePlugins.Add("ADOSupport");``` to UnrealEditor.Target.cs
+   2. To compile core engine and editor run the following commands in the wine console (from source root folder): 
        1. ```Engine\Build\BatchFiles\Build.bat UnrealEditor Win64 Development -waitmutex```
-   2. To compile existing project/game
-       1. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
-       2. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
-   3. To run compiled project in editor
-       1. Run ```Engine/Binaries/Win64/UnrealEditor.exe "<path to uproject file>"```
-8. Packaging Project
-   1. Run Unreal Frontend
-   2. Disable compile UAT before running profile
+8. To compile existing project/game
+   1. Add ```DisablePlugins.Add("ADOSupport");``` to <ProjectName>.Target.cs
+   2. Run ```Engine\Build\BatchFiles\Build.bat <ProjectName>Editor Development Win64 "<path to uproject file>" -Progress -waitmutex```
+   3. You can now open your project in the editor
+9. Packaging Project
+   1. Make sure your project has been compiled as described previously
+   2. Run Unreal Frontend
+   3. Disable compile UAT before running profile
+   4. Run profile
 
 ## Fixes
  
