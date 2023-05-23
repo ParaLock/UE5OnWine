@@ -8,7 +8,7 @@ This repo contains a collection of scripts and instructions for compiling and ru
 ## Instructions
 
 1. Setup Bottles
-   1. Clone ```wine-tkg``` repo and compile with latest wine staging as wine branch
+   1. Clone ```wine-tkg``` repo
    2. Build non-proton version of wine (default tkg preset)
    3. Copy built ```wine-tkg``` package to bottles runners directory
 2. Setup Wine Prefix
@@ -70,7 +70,6 @@ UE5 may at times freeze up or crash while being run under wine. Below is a set o
    2. In general, GPU crashes are usually caused by shader issues. We recommend that you leverage vkd3d-proton (when in dx12 mode) to debug and fix the issue. We recommend using the vkd3d-proton breadcrumbs mechanism as your primary debugging tool. Once you have narrowed down the faulty shader in the vkd3d-proton log by examining breadcrumbs, you can decompile the shader in question, modify the decompiled shader to get around a certain issue, recompile the shader, and finally instruct vkd3d-proton to swap out the faulty shader for your new version.
    
 ## Notes
-1. ```dotnet48``` is required by the mstools installer
-2. Testing with wine-tkg version 8.7 and UE 5.2
+1. Testing with wine-tkg version 8.7 and UE 5.2
 
 
